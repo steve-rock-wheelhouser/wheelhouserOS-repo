@@ -21,8 +21,10 @@ echo "Copying over newest RPM binaries from $RPM_SOURCE..."
 cp "$RPM_SOURCE"/*.rpm "$REPO_DIR/x86_64/" 2>/dev/null || echo "No new RPM files found to copy."
 
 echo "Updating repodata..."
-# Use createrepo_c (or createrepo if on an older system)
-if command -v createrepo_c &> /dev/null; then
+# Handle Flatpak environment by escaping to host, otherwise use direct command
+if command -v flatpak-spawn &> /dev/null && flatpak-spawn --host command -v createrepo_c &> /dev/null; then
+    flatpak-spawn --host createrepo_c .
+elif command -v createrepo_c &> /dev/null; then
     createrepo_c .
 elif command -v createrepo &> /dev/null; then
     createrepo .
