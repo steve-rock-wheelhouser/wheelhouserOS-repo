@@ -34,8 +34,7 @@ else
 fi
 
 echo "Staging changes for Git..."
-git add x86_64/*.rpm
-git add repodata/
+git add .
 
 # Check if there are changes to commit
 if git diff --staged --quiet; then
